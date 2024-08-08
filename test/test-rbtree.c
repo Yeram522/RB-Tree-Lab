@@ -74,6 +74,9 @@ void test_erase_root(const key_t key) {
 static void insert_arr(rbtree *t, const key_t *arr, const size_t n) {
   for (size_t i = 0; i < n; i++) {
     rbtree_insert(t, arr[i]);
+    node_t *p = rbtree_find(t, arr[i]);
+    assert(p != NULL);
+    assert(p->key == arr[i]);
   }
 }
 
@@ -132,7 +135,7 @@ void test_to_array(rbtree *t, const key_t *arr, const size_t n) {
 
   insert_arr(t, arr, n);
   qsort((void *)arr, n, sizeof(key_t), comp);
-
+ 
   key_t *res = calloc(n, sizeof(key_t));
   rbtree_to_array(t, res, n);
   for (int i = 0; i < n; i++) {
@@ -318,10 +321,11 @@ void test_find_erase(rbtree *t, const key_t *arr, const size_t n) {
 
   for (int i = 0; i < n; i++) {
     node_t *p = rbtree_find(t, arr[i]);
-    // printf("arr[%d] = %d\n", i, arr[i]);
     assert(p != NULL);
     assert(p->key == arr[i]);
     rbtree_erase(t, p);
+    test_color_constraint(t);
+    test_search_constraint(t);
   }
 
   for (int i = 0; i < n; i++) {

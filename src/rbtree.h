@@ -18,6 +18,7 @@ typedef struct {
   node_t *nil;  // for sentinel
 } rbtree;
 
+
 rbtree *new_rbtree(void);
 void delete_rbtree(rbtree *);
 
